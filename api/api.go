@@ -41,6 +41,17 @@ func initAtomParam() {
 	}
 }
 
+func GetInputParam(name string) string {
+	value := gAllAtomParam[name]
+	if value == nil {
+		return ""
+	}
+	strValue, ok := value.(string)
+	if !ok {
+		return ""
+	}
+	return strValue
+}
 
 func LoadInputParam(v interface{}) error {
 	file := gDataDir + "/" + gInputFile
