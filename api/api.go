@@ -207,3 +207,10 @@ func GetWorkspace() string {
 	return gAtomBaseParam.Workspace
 }
 
+func NewStringData(value string) *StringData {
+	return &StringData{
+		Type:  DataTypeString,
+		Value: value,
+	}
+}
+

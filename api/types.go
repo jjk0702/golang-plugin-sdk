@@ -15,6 +15,14 @@ const (
 	StatusError   Status = "error"
 )
 
+type DataType string
+
+const (
+	DataTypeString   DataType = "string"
+	DataTypeArtifact DataType = "artifact"
+	DataTypeReport   DataType = "report"
+)
+
 type AtomBaseParam struct {
 	PipelineVersion        string `json:"pipeline.version"`
 	ProjectName            string `json:"project.name"`
@@ -45,4 +53,8 @@ func NewAtomOutput() *AtomOutput {
 	output.Type = "default"
 	output.Data = make(map[string]interface{})
 	return output
+}
+type StringData struct {
+	Type  DataType `json:"type"`
+	Value string   `json:"value"`
 }
