@@ -19,11 +19,9 @@ type DataType string
 
 const (
 	DataTypeString   DataType = "string"
-	DataTypeArtifact DataType = "artifact"
-	DataTypeReport   DataType = "report"
 )
 
-type AtomBaseParam struct {
+type PluginBaseParam struct {
 	PipelineVersion        string `json:"pipeline.version"`
 	ProjectName            string `json:"project.name"`
 	ProjectNameCn          string `json:"project.name.chinese"`
@@ -38,7 +36,7 @@ type AtomBaseParam struct {
 	Workspace            string `json:"workspace"`
 }
 
-type AtomOutput struct {
+type PluginOutput struct {
 	Status    Status                 `json:"status"`
 	Message   string                 `json:"message"`
 	ErrorCode int                    `json:"errorCode"`
@@ -46,8 +44,8 @@ type AtomOutput struct {
 	Data      map[string]interface{} `json:"data"`
 }
 
-func NewAtomOutput() *AtomOutput {
-	output := new(AtomOutput)
+func NewPluginOutput() *PluginOutput {
+	output := new(PluginOutput)
 	output.Status = StatusSuccess
 	output.Message = "success"
 	output.Type = "default"

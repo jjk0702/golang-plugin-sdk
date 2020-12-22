@@ -12,37 +12,37 @@ import (
 var gDataDir string
 var gInputFile string
 var gOutputFile string
-var gAtomOutput *AtomOutput
-var gAllAtomParam map[string]interface{}
-var gAtomBaseParam *AtomBaseParam
+var gPluginOutput *PluginOutput
+var gAllPluginParam map[string]interface{}
+var gPluginBaseParam *PluginBaseParam
 
 
 
 func init() {
-	gAtomOutput = NewAtomOutput()
+	gPluginOutput = NewPluginOutput()
 	gDataDir = getDataDir()
 	gInputFile = getInputFile()
 	gOutputFile = getOutputFile()
-	initAtomParam()
+	initPluginParam()
 }
 
-func initAtomParam() {
-	err := LoadInputParam(&gAllAtomParam)
+func initPluginParam() {
+	err := LoadInputParam(&gAllPluginParam)
 	if err != nil {
-		log.Error("init atom base param failed: ", err.Error())
-		FinishBuildWithErrorCode(StatusError, "init atom base param failed", 16015100)
+		log.Error("init plugin base param failed: ", err.Error())
+		FinishBuildWithErrorCode(StatusError, "init plugin base param failed", 16015100)
 	}
 
-	gAtomBaseParam = new(AtomBaseParam)
-	err = LoadInputParam(gAtomBaseParam)
+	gPluginBaseParam = new(PluginBaseParam)
+	err = LoadInputParam(gPluginBaseParam)
 	if err != nil {
-		log.Error("init atom base param failed: ", err.Error())
-		FinishBuildWithErrorCode(StatusError, "init atom base param failed", 16015100)
+		log.Error("init plugin base param failed: ", err.Error())
+		FinishBuildWithErrorCode(StatusError, "init plugin base param failed", 16015100)
 	}
 }
 
 func GetInputParam(name string) string {
-	value := gAllAtomParam[name]
+	value := gAllPluginParam[name]
 	if value == nil {
 		return ""
 	}
@@ -95,20 +95,20 @@ func getOutputFile() string {
 }
 
 func GetOutputData(key string) interface{} {
-	return gAtomOutput.Data[key]
+	return gPluginOutput.Data[key]
 }
 
 func AddOutputData(key string, data interface{}) {
-	gAtomOutput.Data[key] = data
+	gPluginOutput.Data[key] = data
 }
 
 func RemoveOutputData(key string) {
-	delete(gAtomOutput.Data, key)
+	delete(gPluginOutput.Data, key)
 }
 
 
 func WriteOutput() error {
-	data, _ := json.Marshal(gAtomOutput)
+	data, _ := json.Marshal(gPluginOutput)
 
 	file := gDataDir + "/" + gOutputFile
 	err := ioutil.WriteFile(file, data, 0644)
@@ -121,8 +121,8 @@ func WriteOutput() error {
 
 
 func FinishBuild(status Status, msg string) {
-	gAtomOutput.Message = msg
-	gAtomOutput.Status = status
+	gPluginOutput.Message = msg
+	gPluginOutput.Status = status
 	WriteOutput()
 	switch status {
 	case StatusSuccess:
@@ -137,9 +137,9 @@ func FinishBuild(status Status, msg string) {
 }
 
 func FinishBuildWithErrorCode(status Status, msg string, errorCode int) {
-	gAtomOutput.Message = msg
-	gAtomOutput.Status = status
-	gAtomOutput.ErrorCode = errorCode
+	gPluginOutput.Message = msg
+	gPluginOutput.Status = status
+	gPluginOutput.ErrorCode = errorCode
 	WriteOutput()
 	switch status {
 	case StatusSuccess:
@@ -155,56 +155,56 @@ func FinishBuildWithErrorCode(status Status, msg string, errorCode int) {
 
 
 
-func SetAtomOutputType(atomOutputType string) {
-	gAtomOutput.Type = atomOutputType
+func SetPluginOutputType(pluginOutputType string) {
+	gPluginOutput.Type = pluginOutputType
 }
 
 func GetProjectName() string {
-	return gAtomBaseParam.ProjectName
+	return gPluginBaseParam.ProjectName
 }
 
 func GetProjectDisplayName() string {
-	return gAtomBaseParam.ProjectNameCn
+	return gPluginBaseParam.ProjectNameCn
 }
 
 func GetPipelineId() string {
-	return gAtomBaseParam.PipelineId
+	return gPluginBaseParam.PipelineId
 }
 
 func GetPipelineName() string {
-	return gAtomBaseParam.PipelineName
+	return gPluginBaseParam.PipelineName
 }
 
 func GetPipelineBuildId() string {
-	return gAtomBaseParam.PipelineBuildId
+	return gPluginBaseParam.PipelineBuildId
 }
 
 func GetPipelineBuildNumber() string {
-	return gAtomBaseParam.PipelineBuildNum
+	return gPluginBaseParam.PipelineBuildNum
 }
 
 func GetPipelineStartType() string {
-	return gAtomBaseParam.PipelineStartType
+	return gPluginBaseParam.PipelineStartType
 }
 
 func GetPipelineStartUserId() string {
-	return gAtomBaseParam.PipelineStartUserId
+	return gPluginBaseParam.PipelineStartUserId
 }
 
 func GetPipelineStartUserName() string {
-	return gAtomBaseParam.PipelineStartUserName
+	return gPluginBaseParam.PipelineStartUserName
 }
 
 func GetPipelineStartTimeMills() string {
-	return gAtomBaseParam.PipelineStartTimeMills
+	return gPluginBaseParam.PipelineStartTimeMills
 }
 
 func GetPipelineVersion() string {
-	return gAtomBaseParam.PipelineVersion
+	return gPluginBaseParam.PipelineVersion
 }
 
 func GetWorkspace() string {
-	return gAtomBaseParam.Workspace
+	return gPluginBaseParam.Workspace
 }
 
 func NewStringData(value string) *StringData {
