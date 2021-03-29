@@ -1,12 +1,12 @@
 package api
 
 import (
+	"encoding/json"
 	"errors"
 	"github.com/fdev-ci/golang-plugin-sdk/log"
 	"io/ioutil"
 	"os"
 	"strings"
-	"encoding/json"
 )
 
 var gDataDir string
@@ -16,17 +16,19 @@ var gPluginOutput *PluginOutput
 var gAllPluginParam map[string]interface{}
 var gPluginBaseParam *PluginBaseParam
 
-
-
-func init() {
+func Init() {
+	log.Info("================ Plugin-SDK init start ================")
 	gPluginOutput = NewPluginOutput()
 	gDataDir = getDataDir()
 	gInputFile = getInputFile()
 	gOutputFile = getOutputFile()
+	log.Info("================ init base plugin start ================")
 	initPluginParam()
+	log.Info("================ init base plugin success ================")
 }
 
 func initPluginParam() {
+	log.Info("================ load input param start ================")
 	err := LoadInputParam(&gAllPluginParam)
 	if err != nil {
 		log.Error("init plugin base param failed: ", err.Error())
@@ -39,6 +41,7 @@ func initPluginParam() {
 		log.Error("init plugin base param failed: ", err.Error())
 		FinishBuildWithErrorCode(StatusError, "init plugin base param failed", 16015100)
 	}
+	log.Info("================ load input param success ================")
 }
 
 func GetInputParam(name string) string {
@@ -68,7 +71,6 @@ func LoadInputParam(v interface{}) error {
 	return nil
 }
 
-
 func getDataDir() string {
 	dir := strings.TrimSpace(os.Getenv(DataDirEnv))
 	if len(dir) == 0 {
@@ -76,7 +78,6 @@ func getDataDir() string {
 	}
 	return dir
 }
-
 
 func getInputFile() string {
 	file := strings.TrimSpace(os.Getenv(InputFileEnv))
@@ -106,7 +107,6 @@ func RemoveOutputData(key string) {
 	delete(gPluginOutput.Data, key)
 }
 
-
 func WriteOutput() error {
 	data, _ := json.Marshal(gPluginOutput)
 
@@ -118,7 +118,6 @@ func WriteOutput() error {
 	}
 	return nil
 }
-
 
 func FinishBuild(status Status, msg string) {
 	gPluginOutput.Message = msg
@@ -152,8 +151,6 @@ func FinishBuildWithErrorCode(status Status, msg string, errorCode int) {
 		os.Exit(0)
 	}
 }
-
-
 
 func SetPluginOutputType(pluginOutputType string) {
 	gPluginOutput.Type = pluginOutputType
@@ -213,4 +210,3 @@ func NewStringData(value string) *StringData {
 		Value: value,
 	}
 }
-
