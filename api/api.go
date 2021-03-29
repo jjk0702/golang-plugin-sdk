@@ -16,7 +16,7 @@ var gPluginOutput *PluginOutput
 var gAllPluginParam map[string]interface{}
 var gPluginBaseParam *PluginBaseParam
 
-func Init() {
+func init() {
 	log.Info("================ Plugin-SDK init start ================")
 	gPluginOutput = NewPluginOutput()
 	gDataDir = getDataDir()
