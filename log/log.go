@@ -2,7 +2,7 @@ package log
 
 import (
 	"fmt"
-	"github.com/fdev-ci/golang-plugin-sdk/utils/ansi"
+	"github.com/fdev-ci/golang-plugin-sdk/util/ansi"
 	"time"
 )
 
